@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
+from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 def login_user(request):
@@ -11,5 +12,7 @@ def login_user(request):
 		if user is not None:
 			login(request, user)
 			return redirect("YugiWeb:index")
+		else:
+			return render(request, 'YugiLog:login')
 			
 	
