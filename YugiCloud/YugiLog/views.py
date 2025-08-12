@@ -12,7 +12,7 @@ def login_user(request):
 			login(request, user)
 			return redirect("YugiWeb:index")
 		else:
-			return render(request, 'YugiLog:login', {'error_message': 'Nom d\'utilisateur incorrect'})
+			return render(request, 'YugiLog:login', {'error_message': 'Nom d\'utilisateur incorrect ou mot de passe !!'})
 		
 	else:
 		return render(request, 'YugiLog:login', {'error_message': 'Method Error'})
