@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.models import User
 
 def login_user(request):
 	if request.method == 'POST':
@@ -25,4 +25,12 @@ def register_user(request):
 	if request.method == 'POST':
 		username = request.method.POST.get('username')
 		password = request.method.POST.get('password')
-		
+		rep_password = request.method.POST.get('rep_password')
+		if rep_password == password:
+			User.objects.create_user(username, password=password)
+			return redirect('YugiLog:login')
+		else:
+			return render(request, 'YugiLog:register', {'error_message': 'Les mots de passes ne sont pas identiques !'})
+	else:
+		return render(request, 'YugiLog:login', {'error_message': 'Method Error'})
+
