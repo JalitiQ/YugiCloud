@@ -1,0 +1,23 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1; /* occupe tout l’espace dispo */
+}
+
+.custom-footer {
+  margin-top: auto; /* pousse le footer en bas */
+}
+
+.bg-custom {
+  background-color: #395168 !important;
+}
+
