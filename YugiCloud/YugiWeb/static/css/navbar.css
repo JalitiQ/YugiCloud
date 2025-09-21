@@ -1,0 +1,4 @@
+/* Change la couleur de fond de la navbar */
+.navbar.bg-primary {
+  background-color: #395168 !important; /* bleu foncé/gris */
+}

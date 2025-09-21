@@ -4,5 +4,5 @@ from . import views
 app_name = "YugiWeb"
 
 urlpatterns = [
-    path("", views.accueil, name="accueil"),
+    path('', views.accueil, name="accueil"),
 ]

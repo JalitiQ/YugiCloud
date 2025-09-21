@@ -1,51 +1,60 @@
+{% load django_bootstrap5 %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <title>{% block title %}{% endblock %}</title>
     <meta charset="utf8">
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
     {% bootstrap_css %}
     {% bootstrap_javascript %}
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
     <div class="container-fluid">
-    <!-- Logo ou nom du site -->
-    <a class="navbar-brand" href="#">MonSite</a>
-
-    <!-- Bouton burger (petits écrans) -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <!-- Liens du menu -->
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Accueil</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">À propos</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Contact</a>
-        </li>
-        <!-- Menu déroulant -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Plus
-          </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Profil</a></li>
-            <li><a class="dropdown-item" href="#">Paramètres</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Déconnexion</a></li>
-          </ul>
-        </li>
-      </ul>
+        <a class="navbar-brand" href="#">YugiCloud</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+            <a class="nav-link" href="#">Features</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" href="#">Pricing</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+            </li>
+            {% if user.is_authenticated %}
+            <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Profil</a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">Ma Collection</a>
+                <a class="dropdown-item" href="#">Modifier | {{ user.username }}</a>
+                <a class="dropdown-item" href="#">Dashboard</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'YugiLog:logout' %}">Se déconnecter</a>
+            </div>
+            </li>
+            {% else %}
+            <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Connexion | Inscription</a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">Connexion</a>
+                <a class="dropdown-item" href="#">Inscription</a>
+            </div>
+            </li>
+            {% endif %}
+        </ul>
+        <form class="d-flex">
+            <input class="form-control me-sm-2" type="search" placeholder="Search">
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+        </form>
+        </div>
     </div>
-  </div>
-</nav>
-
+    </nav>
     <main>
         {% block content %}{% endblock %}
     </main>

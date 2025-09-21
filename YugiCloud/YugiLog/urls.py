@@ -1,6 +1,7 @@
 from django.urls import path
-from YugiCloud.YugiLog import views
-from views import *
+from . import views
+
+app_name = "YugiLog"
 
 urlpatterns = [
     path('login/', views.login_user, name='login'),
