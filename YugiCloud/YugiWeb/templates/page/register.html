@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}YugiCloud | Inscription{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="card shadow-lg" style="max-width: 420px; width: 100%;">
+    <div class="card-header text-center text-light" style="background-color: #395168;">
+      <h5 class="mb-0">Inscription</h5>
+    </div>
+    <div class="card-body p-4">
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} mb-3">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+
+      <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="username" class="form-label">Nom d'utilisateur</label>
+          <input type="username " class="form-control" id="username" name="username" placeholder="Yugiman" required>
+        </div>
+        <div class="mb-3">
+          <label for="id_password" class="form-label">Mot de passe</label>
+          <input type="password" class="form-control" id="id_password" name="password" placeholder="••••••••" required>
+        </div>
+        <div class="mb-3">
+          <label for="id_password" class="form-label">Répétition du Mot de passe</label>
+          <input type="rep_password" class="form-control" id="id_password" name="rep_password" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn w-100 text-light" style="background-color: #395168;">S'inscrire</button>
+      </form>
+      <div class="card-footer text-center">
+      <small>Déjà Inscris ??
+        <a href="{% url 'YugiLog:login' %}" class="text-decoration-none" style="color: #395168;">
+          Connexion
+        </a>
+      </small>
+    </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

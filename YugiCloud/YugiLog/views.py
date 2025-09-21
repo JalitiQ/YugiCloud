@@ -4,18 +4,18 @@ from django.contrib.auth.models import User
 
 def login_user(request):
 	if request.method == 'POST':
-		username = request.method.POST.get('username')
-		password = request.method.POST.get('password')
+		username = request.POST.get('username')
+		password = request.POST.get('password')
 		user = authenticate(request, username=username, password=password)
 
 		if user is not None:
 			login(request, user)
-			return redirect("YugiWeb:index")
+			return redirect("YugiWeb:accueil")
 		else:
-			return render(request, 'YugiLog:login', {'error_message': 'Nom d\'utilisateur incorrect ou mot de passe !!'})
+			return render(request, 'page/login.html', {'message': 'Nom d\'utilisateur incorrect ou mot de passe !!'})
 		
 	else:
-		return render(request, 'YugiLog:login', {'error_message': 'Method Error'})
+		return render(request, 'page/login.html', {'message': 'Method Error'})
 
 def logout_user(request):
 	logout(request)
@@ -23,14 +23,14 @@ def logout_user(request):
 
 def register_user(request):
 	if request.method == 'POST':
-		username = request.method.POST.get('username')
-		password = request.method.POST.get('password')
-		rep_password = request.method.POST.get('rep_password')
+		username = request.POST.get('username')
+		password = request.POST.get('password')
+		rep_password = request.POST.get('rep_password')
 		if rep_password == password:
 			User.objects.create_user(username, password=password)
 			return redirect('YugiLog:login')
 		else:
-			return render(request, 'YugiLog:register', {'error_message': 'Les mots de passes ne sont pas identiques !'})
+			return render(request, 'page/register.html', {'message': 'Les mots de passes ne sont pas identiques !'})
 	else:
-		return render(request, 'YugiLog:login', {'error_message': 'Method Error'})
+		return render(request, 'page/register.html', {'message': 'Method Error'})
 
