@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Recherche de cartes{% endblock %}
+
+{% block content %}
+<h1>Recherche simple</h1>
+
+<form method="get" action="{% url 'YugiWeb:search' %}" style="display:grid;gap:.5rem;max-width:520px">
+  <input name="q" placeholder="Entrez un terme (ex: dragon, 2500…)" value="{{ q|default:'' }}">
+  <select name="field">
+    {% for fname, label, ftype in fields_config %}
+      <option value="{{ fname }}" {% if field == fname %}selected{% endif %}>{{ label }}</option>
+    {% endfor %}
+  </select>
+  <button type="submit">Rechercher</button>
+</form>
+
+<hr>
+
+{% if cards %}
+  <p>{{ cards|length }} résultat(s)</p>
+  <ul style="display:grid;gap:0.75rem;list-style:none;padding-left:0">
+    {% for c in cards %}
+      <li>
+        <div><strong>{{ c.name }}</strong></div>
+        {% if c.archetype %}<div>{{ c.archetype }}</div>{% endif %}
+        <div style="white-space:pre-wrap;">
+          {{ c.description|default:c.desc|truncatechars:300 }}
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>Aucun résultat</p>
+{% endif %}
+
+{% endblock %}
