@@ -20,16 +20,17 @@
         <div class="collapse navbar-collapse" id="navbarColor01">
         <ul class="navbar-nav me-auto">
             <li class="nav-item">
-            <a class="nav-link" href="#">Recherche de Cartes</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link" href="{% url 'YugiWeb:search_fr' %}">FR Search</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link" href="{% url 'YugiWeb:search_en' %}">EN Search</a>
+            <a class="nav-link" href="#">Rien</a>
             </li>
             <li class="nav-item">
             <a class="nav-link" href="#">About</a>
+            </li>
+			<li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Recherche de cartes FR|EN</a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="{% url 'YugiWeb:search_fr' %}">Recherche de cartes FR</a>
+                <a class="dropdown-item" href="{% url 'YugiWeb:search_en' %}">Recherche de cartes EN</a>
+            </div>
             </li>
             {% if user.is_authenticated %}
             <li class="nav-item dropdown">
