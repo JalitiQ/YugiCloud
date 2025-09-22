@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}YugiCloud | Recherche de Cartes{% endblock %}
+
+{% block content %}
+<form id="search-form">
+  <input name="q" placeholder="Rechercher…" required />
+  <select name="field">
+    <option value="name_contains">Nom (contient)</option>
+    <option value="name_exact">Nom (exact)</option>
+    <option value="set">Extension</option>
+    <option value="archetype">Archétype</option>
+    <option value="type">Type</option>
+    <option value="attribute">Attribut</option>
+    <option value="race">Race</option>
+    <option value="level_eq">Niveau =</option>
+    <option value="level_gte">Niveau ≥</option>
+    <option value="level_lte">Niveau ≤</option>
+    <option value="atk_gte">ATK ≥</option>
+    <option value="def_lte">DEF ≤</option>
+  </select>
+  <button type="submit">Chercher</button>
+</form>
+
+<pre id="out"></pre>
+
+<script>
+  const form = document.getElementById('search-form');
+  const out  = document.getElementById('out');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fd = new FormData(form);
+
+    // On construit l’URL relative → pas besoin de "http://localhost:8000"
+    const url = new URL('/api/cards-fr', window.location.origin);
+    url.searchParams.set('q', fd.get('q'));
+    url.searchParams.set('field', fd.get('field'));
+
+    const resp = await fetch(url);
+    const data = await resp.json();
+    out.textContent = JSON.stringify(data, null, 2);
+  });
+</script>
+
+{% endblock %}

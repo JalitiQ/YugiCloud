@@ -5,4 +5,5 @@ app_name = "YugiWeb"
 
 urlpatterns = [
     path('', views.accueil, name="accueil"),
+	path('search/', views.recherche, name="search")
 ]

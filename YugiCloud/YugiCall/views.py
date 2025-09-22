@@ -49,18 +49,6 @@ class CardSearchFRView(View):
         elif field == "race":
             params["race"] = q
 
-        # Numériques : YGOPRODeck accepte les comparateurs sous forme préfixée (lte/gte/lt/gt/eq)
-        elif field == "level_eq":
-            params["level"] = f"eq{q}"
-        elif field == "level_gte":
-            params["level"] = f"gte{q}"
-        elif field == "level_lte":
-            params["level"] = f"lte{q}"
-        elif field == "atk_gte":
-            params["atk"] = f"gte{q}"
-        elif field == "def_lte":
-            params["def"] = f"lte{q}"
-
         else:
             return JsonResponse({"error": f"Filtre inconnu: {field}"}, status=400)
 

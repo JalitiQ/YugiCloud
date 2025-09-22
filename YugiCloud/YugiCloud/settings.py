@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django_bootstrap5',
 	'YugiWeb',
 	'YugiLog',
+	'YugiCall',
 ]
 
 MIDDLEWARE = [

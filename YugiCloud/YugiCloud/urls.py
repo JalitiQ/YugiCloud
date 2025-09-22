@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 	path('', include('YugiWeb.urls')),
 	path('account/', include('YugiLog.urls')),
+	path('', include('YugiCall.urls')),
 ]
