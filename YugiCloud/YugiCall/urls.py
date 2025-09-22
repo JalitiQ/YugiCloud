@@ -7,4 +7,5 @@ from .views import CardSearchFRView
 urlpatterns = [
     # Quand quelqu’un appelle /api/cards-fr, Django déclenche CardSearchFRView.
     path("api/cards-fr", CardSearchFRView.as_view(), name="card-search-fr"),
+    #path("api/cards-en", CardSearchENView.as_view(), name="card-search-en"),
 ]

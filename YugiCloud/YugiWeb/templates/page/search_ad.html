@@ -1,37 +1,79 @@
 {% extends "base.html" %}
 
-{% block title %}Recherche de cartes{% endblock %}
+{% block title %}Recherche (FR){% endblock %}
 
 {% block content %}
-<h1>Recherche simple</h1>
+<div class="container py-4">
+  <h1 class="mb-3">Recherche (FR)</h1>
 
-<form method="get" action="{% url 'YugiWeb:search' %}" style="display:grid;gap:.5rem;max-width:520px">
-  <input name="q" placeholder="Entrez un terme (ex: dragon, 2500…)" value="{{ q|default:'' }}">
-  <select name="field">
-    {% for fname, label, ftype in fields_config %}
-      <option value="{{ fname }}" {% if field == fname %}selected{% endif %}>{{ label }}</option>
-    {% endfor %}
-  </select>
-  <button type="submit">Rechercher</button>
-</form>
+  <form method="get" action="{% url 'YugiWeb:search_fr' %}" class="row g-2 align-items-end mb-3">
+    <div class="col-md-6">
+      <label class="form-label">Terme</label>
+      <input name="q" class="form-control" placeholder="Ex: dragon, DUDE-FRxxx, 2500…" value="{{ q|default:'' }}">
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Champ</label>
+      <select name="field" class="form-select">
+        {% for fname, label, ftype in fields_config %}
+          <option value="{{ fname }}" {% if field == fname %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2 d-grid">
+      <button type="submit" class="btn btn-primary">Rechercher</button>
+    </div>
+  </form>
 
-<hr>
-
-{% if cards %}
-  <p>{{ cards|length }} résultat(s)</p>
-  <ul style="display:grid;gap:0.75rem;list-style:none;padding-left:0">
-    {% for c in cards %}
-      <li>
-        <div><strong>{{ c.name }}</strong></div>
-        {% if c.archetype %}<div>{{ c.archetype }}</div>{% endif %}
-        <div style="white-space:pre-wrap;">
-          {{ c.description|default:c.desc|truncatechars:300 }}
-        </div>
-      </li>
-    {% endfor %}
-  </ul>
-{% else %}
-  <p>Aucun résultat</p>
-{% endif %}
-
+  {% if cards %}
+    <div class="table-responsive">
+      <table class="table table-striped table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nom</th>
+            <th scope="col">Type</th>
+            <th scope="col">Race</th>
+            <th scope="col">Attribut</th>
+            <th scope="col">Niveau</th>
+            <th scope="col">ATK</th>
+            <th scope="col">DEF</th>
+            <th scope="col" style="min-width: 320px;">Description</th>
+            <th scope="col">Sets imprimés</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in cards %}
+            <tr>
+              <td class="text-muted">{{ c.id }}</td>
+              <td><strong>{{ c.name }}</strong></td>
+              <td>{{ c.type }}</td>
+              <td>{{ c.race }}</td>
+              <td>{{ c.attribute }}</td>
+              <td>{{ c.level|default_if_none:"" }}</td>
+              <td>{{ c.atk|default_if_none:"" }}</td>
+              <td>{{ c.def_stat|default_if_none:"" }}</td>
+              <td class="text-body-secondary"><div style="white-space:pre-wrap">{{ c.desc|truncatechars:220 }}</div></td>
+              <td>
+                {% if c.card_sets.all %}
+                  <ul class="list-unstyled mb-0">
+                    {% for s in c.card_sets.all %}
+                      <li>{{ s.set_name }}{% if s.set_code %} <span class="text-muted">({{ s.set_code }})</span>{% endif %}</li>
+                    {% empty %}
+                      <li class="text-muted">—</li>
+                    {% endfor %}
+                  </ul>
+                {% else %}
+                  <span class="text-muted">—</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p class="mt-2">{{ cards|length }} résultat(s)</p>
+  {% else %}
+    <div class="alert alert-secondary">Aucun résultat</div>
+  {% endif %}
+</div>
 {% endblock %}

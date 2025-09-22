@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from YugiCall.models import Card, CardSet
+from YugiCall.models import Card, CardSet, CardEN, CardSetEN
 
 # Create your views here.
 def accueil(request):
@@ -109,3 +109,55 @@ def recherche_BDD(request):
 
 def recherche(request):
 	return render(request, "page/search.html")
+
+
+# --- AJOUTS POUR L'ANGLAIS ---
+
+# Config des champs pour la recherche EN (mêmes noms de champs que FR)
+FIELDS_CONFIG_EN = [
+    ("name",      "Nom (EN)",       "text"),
+    ("archetype", "Archétype",      "text"),
+    ("type",      "Type",           "text"),
+    ("attribute", "Attribut",       "text"),
+    ("race",      "Race",           "text"),
+    ("desc",      "Description",    "text"),
+    ("level",     "Niveau",         "number"),
+    ("atk",       "ATK",            "number"),
+    ("def_stat",  "DEF",            "number"),  # <-- DEF se nomme def_stat dans le modèle
+]
+
+def recherche_BDD_en(request):
+    """
+    Recherche simple dans la table anglaise (CardEN) :
+    - GET ?q=<valeur> & field=<champ>
+    - un seul champ filtré à la fois
+    - rend le même template que la vue FR (labels indiquent EN)
+    """
+    q = (request.GET.get("q") or "").strip()
+    field = (request.GET.get("field") or "name").strip()
+
+    cards = CardEN.objects.all().order_by("name")
+
+    if q:
+        config_by_field = {fname: (label, ftype) for fname, label, ftype in FIELDS_CONFIG_EN}
+        if field in config_by_field:
+            _, ftype = config_by_field[field]
+            if ftype == "text":
+                cards = cards.filter(**{f"{field}__icontains": q})
+            elif ftype == "number":
+                cards = cards.filter(**{field: int(q)}) if q.lstrip("-").isdigit() else cards.none()
+        else:
+            cards = cards.none()
+
+    cards = cards.distinct()
+
+    return render(
+        request,
+        "page/search_ad_en.html",   # on réutilise le même template
+        {
+            "cards": cards,
+            "q": q,
+            "field": field,
+            "fields_config": FIELDS_CONFIG_EN,  # on passe la config EN pour le select
+        },
+    )

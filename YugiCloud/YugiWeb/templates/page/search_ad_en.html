@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Search (EN){% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <h1 class="mb-3">Search (EN)</h1>
+
+  <form method="get" action="{% url 'YugiWeb:search_en' %}" class="row g-2 align-items-end mb-3">
+    <div class="col-md-6">
+      <label class="form-label">Query</label>
+      <input name="q" class="form-control" placeholder="e.g. dragon, DUDE-EN019, 2500…" value="{{ q|default:'' }}">
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Field</label>
+      <select name="field" class="form-select">
+        {% for fname, label, ftype in fields_config %}
+          <option value="{{ fname }}" {% if field == fname %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2 d-grid">
+      <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+  </form>
+
+  {% if cards %}
+    <div class="table-responsive">
+      <table class="table table-striped table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Type</th>
+            <th scope="col">Race</th>
+            <th scope="col">Attribute</th>
+            <th scope="col">Level</th>
+            <th scope="col">ATK</th>
+            <th scope="col">DEF</th>
+            <th scope="col" style="min-width: 320px;">Description</th>
+            <th scope="col">Printed in Sets</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in cards %}
+            <tr>
+              <td class="text-muted">{{ c.id }}</td>
+              <td><strong>{{ c.name }}</strong></td>
+              <td>{{ c.type }}</td>
+              <td>{{ c.race }}</td>
+              <td>{{ c.attribute }}</td>
+              <td>{{ c.level|default_if_none:"" }}</td>
+              <td>{{ c.atk|default_if_none:"" }}</td>
+              <td>{{ c.def_stat|default_if_none:"" }}</td>
+              <td class="text-body-secondary"><div style="white-space:pre-wrap">{{ c.desc|truncatechars:220 }}</div></td>
+              <td>
+                {% if c.card_sets.all %}
+                  <ul class="list-unstyled mb-0">
+                    {% for s in c.card_sets.all %}
+                      <li>{{ s.set_name }}{% if s.set_code %} <span class="text-muted">({{ s.set_code }})</span>{% endif %}</li>
+                    {% empty %}
+                      <li class="text-muted">—</li>
+                    {% endfor %}
+                  </ul>
+                {% else %}
+                  <span class="text-muted">—</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p class="mt-2">{{ cards|length }} result(s)</p>
+  {% else %}
+    <div class="alert alert-secondary">No results</div>
+  {% endif %}
+</div>
+{% endblock %}

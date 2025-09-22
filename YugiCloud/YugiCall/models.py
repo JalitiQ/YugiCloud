@@ -128,3 +128,70 @@ class CardSet(models.Model):
     def __str__(self):
         # Représentation textuelle : "Nom de carte — Code set"
         return f"{self.card.name} — {self.set_code}"
+
+# =========================
+#  Modèle principal : CardEN
+# =========================
+class CardEN(models.Model):
+    """
+    Version EN des cartes (structure identique à Card).
+    Clé primaire = id (même valeur que l'API EN).
+    """
+
+    id = models.BigIntegerField(primary_key=True)
+    name = models.CharField(max_length=255, db_index=True)
+    type = models.CharField(max_length=100, db_index=True)
+    frameType = models.CharField(max_length=50)
+    desc = models.TextField()
+    atk = models.IntegerField(null=True, blank=True, db_index=True)
+    def_stat = models.IntegerField(null=True, blank=True, db_index=True)
+    level = models.IntegerField(null=True, blank=True, db_index=True)
+    race = models.CharField(max_length=100, db_index=True)
+    attribute = models.CharField(max_length=50, db_index=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["name"]),
+            models.Index(fields=["type"]),
+            models.Index(fields=["race"]),
+            models.Index(fields=["attribute"]),
+            models.Index(fields=["atk"]),
+            models.Index(fields=["def_stat"]),
+            models.Index(fields=["level"]),
+        ]
+        verbose_name = "Card (EN)"
+        verbose_name_plural = "Cards (EN)"
+
+    def __str__(self):
+        return f"{self.name} ({self.id})"
+
+
+# =========================
+#  Modèle secondaire : CardSetEN
+# =========================
+class CardSetEN(models.Model):
+    """
+    Version EN des sets/éditions, liée à CardEN.
+    Structure identique à CardSet.
+    """
+
+    card = models.ForeignKey(CardEN, on_delete=models.CASCADE, related_name="card_sets")
+    set_name = models.CharField(max_length=255, db_index=True)
+    set_code = models.CharField(max_length=50, db_index=True)
+    set_rarity = models.CharField(max_length=100)
+    set_rarity_code = models.CharField(max_length=20)
+    set_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=["card", "set_code"], name="uniq_card_en_setcode"),
+        ]
+        indexes = [
+            models.Index(fields=["set_name"]),
+            models.Index(fields=["set_code"]),
+        ]
+        verbose_name = "Card Set (EN)"
+        verbose_name_plural = "Card Sets (EN)"
+
+    def __str__(self):
+        return f"{self.card.name} — {self.set_code}"
